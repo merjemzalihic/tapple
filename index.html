@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
+    }
+
+    #game-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      max-width: 80%;
+      margin: auto;
+    }
+
+    #timer {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    #alphabet-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .alphabet-btn {
+      font-size: 16px;
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .alphabet-btn:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+
+    .alphabet-btn.selected {
+      visibility: hidden;
+    }
+
+    #selected-letters {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    #message {
+      font-size: 18px;
+      margin-top: 10px;
+      color: #f00;
+    }
+
+    @media (max-width: 600px) {
+      #game-container {
+        max-width: 100%;
+      }
+    }
+  </style>
+  <title>Alphabet Game</title>
+</head>
+
+<body>
+  <div id="game-container">
+    <div id="timer">Time: <span id="timer-value">10</span> seconds</div>
+    <div id="alphabet-container"></div>
+    <div id="selected-letters">Selected Letters: </div>
+    <div id="message"></div>
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <script>
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let selectedLetters = [];
+    let timerValue = 10;
+    let timerInterval;
+
+    function startGame() {
+      resetGame();
+      displayAlphabetButtons();
+      startTimer();
+    }
+
+    function resetGame() {
+      selectedLetters = [];
+      timerValue = 10;
+      clearInterval(timerInterval);
+      updateTimerDisplay();
+      updateMessage('');
+      updateSelectedLettersDisplay();
+    }
+
+    function displayAlphabetButtons() {
+      const alphabetContainer = document.getElementById('alphabet-container');
+      alphabetContainer.innerHTML = '';
+
+      for (let letter of alphabet) {
+        const btn = document.createElement('button');
+        btn.classList.add('alphabet-btn');
+        btn.textContent = letter;
+        btn.addEventListener('click', () => selectLetter(letter));
+        alphabetContainer.appendChild(btn);
+      }
+    }
+
+    function selectLetter(letter) {
+      if (!selectedLetters.includes(letter)) {
+        selectedLetters.push(letter);
+        disableButton(letter);
+        updateSelectedLettersDisplay();
+        resetTimer();
+
+        if (selectedLetters.length === alphabet.length) {
+          updateMessage('Game Over! All letters selected.');
+          clearInterval(timerInterval);
+        }
+      }
+    }
+
+    function disableButton(letter) {
+      const buttons = document.getElementsByClassName('alphabet-btn');
+      for (let button of buttons) {
+        if (button.textContent === letter) {
+          button.disabled = true;
+          button.classList.add('selected');
+          break;
+        }
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerValue = 10;
+      startTimer();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timerValue--;
+        updateTimerDisplay();
+
+        if (timerValue === 0) {
+          updateMessage('Time is up! You have been disqualified.');
+          clearInterval(timerInterval);
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById('timer-value').textContent = timerValue;
+    }
+
+    function updateMessage(message) {
+      document.getElementById('message').textContent = message;
+    }
+
+    function updateSelectedLettersDisplay() {
+      document.getElementById('selected-letters').textContent = `Selected Letters: ${selectedLetters.join(', ')}`;
+    }
+
+    // Initial game start
+    startGame();
+  </script>
+</body>
+
+</html>
