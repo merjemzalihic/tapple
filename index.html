@@ -83,7 +83,7 @@
 
 <body>
   <div id="game-container">
-    <div id="timer">Time: <span id="timer-value">10</span> seconds</div>
+    <div id="timer">Time: <span id="timer-value">13</span> seconds</div>
     <div id="alphabet-container"></div>
     <div id="selected-letters">Selected Letters: </div>
     <div id="message"></div>
@@ -93,7 +93,7 @@
   <script>
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let selectedLetters = [];
-    let timerValue = 10;
+    let timerValue = 13;
     let timerInterval;
 
     function startGame() {
@@ -104,7 +104,7 @@
 
     function resetGame() {
       selectedLetters = [];
-      timerValue = 10;
+      timerValue = 13;
       clearInterval(timerInterval);
       updateTimerDisplay();
       updateMessage('');
@@ -151,7 +151,7 @@
 
     function resetTimer() {
       clearInterval(timerInterval);
-      timerValue = 10;
+      timerValue = 13;
       startTimer();
     }
 
